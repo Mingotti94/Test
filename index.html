@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Completo de Segurança Cibernética</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Modern Calm Tech (Neutros, Azul Profundo, Vermelho Alerta) -->
+    <!-- Application Structure Plan: Uma aplicação de página única com uma barra de navegação fixa que leva a seções temáticas. Essa estrutura não-linear permite ao usuário pular diretamente para a informação que precisa, sendo mais amigável que um PowerPoint linear. As interações chave incluem um e-mail falso interativo para identificar tentativas de phishing, um cenário de engenharia social interativo e um cenário de ransomware simulado, todos projetados para aumentar o engajamento e a retenção do aprendizado. A estrutura foi expandida para cobrir diversas ameaças cibernéticas, com seções dedicadas a tipos de ameaças, identificação, prevenção e resposta. -->
+    <!-- Visualization & Content Choices: Informação do Relatório: Definição de Phishing e outras ameaças -> Objetivo: Informar -> Apresentação: Cartões interativos para cada tipo de ameaça -> Justificativa: Divide informações complexas em partes digeríveis e permite fácil comparação. | Informação do Relatório: Sinais de Alerta (foco em Phishing) -> Objetivo: Educar/Treinar -> Apresentação: E-mail falso interativo com hotspots e tooltips diretos -> Justificativa: Aprendizagem ativa é mais eficaz que leitura passiva para desenvolver habilidades de identificação de phishing, com feedback imediato. | Informação do Relatório: Engenharia Social (simulador) -> Objetivo: Educar/Treinar -> Apresentação: Cenário interativo com hotspots e tooltips diretos -> Justificativa: Permite ao usuário identificar táticas de manipulação em um contexto prático com feedback imediato. | Informação do Relatório: Ransomware (simulador) -> Objetivo: Educar/Treinar -> Apresentação: Cenário simulado de infecção com hotspots e tooltips diretos -> Justificativa: Demonstra o impacto e os sinais de um ataque de ransomware de forma visual com feedback imediato. | Informação do Relatório: Dicas de Segurança Cibernética -> Objetivo: Conselho acionável -> Apresentação: Grade de cartões baseada em ícones -> Justificativa: Visualmente atraente e fácil de escanear para dicas práticas. | Informação do Relatório: Como Agir após um Incidente -> Objetivo: Guiar a resposta -> Apresentação: Lista numerada de passos -> Justificativa: Fornece um plano de ação claro e sequencial. | Biblioteca/Método: Vanilla JS para todas as interações. Nenhuma biblioteca de gráficos necessária, pois a fonte é qualitativa. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f7f4;
+            color: #4a4a4a;
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #0056b3; /* Darker blue for hover */
+            border-bottom-color: #0056b3;
+        }
+        .card {
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            border-radius: 0.75rem; /* More rounded */
+        }
+        .card:hover {
+            transform: translateY(-8px); /* More pronounced lift */
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.15), 0 6px 10px -3px rgba(0, 0, 0, 0.08); /* Stronger shadow */
+        }
+        .hotspot {
+            position: absolute;
+            width: 24px; /* Slightly larger */
+            height: 24px; /* Slightly larger */
+            background-color: rgba(239, 68, 68, 0.85); /* More opaque red */
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem; /* Slightly larger text */
+            z-index: 10;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* Small shadow for depth */
+        }
+        .hotspot:hover {
+            transform: scale(1.25); /* More pronounced scale */
+            background-color: rgba(239, 68, 68, 1);
+        }
+        .hotspot-tooltip {
+            position: absolute;
+            background-color: #2c3e50; /* Darker, more modern tooltip background */
+            color: white;
+            padding: 10px 15px; /* More padding */
+            border-radius: 8px; /* More rounded */
+            font-size: 0.9rem; /* text-sm */
+            z-index: 20;
+            white-space: normal;
+            width: 220px; /* Slightly wider tooltip */
+            box-shadow: 0 8px 16px rgba(0,0,0,0.25); /* Stronger shadow */
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out, transform 0.3s ease-in-out;
+            transform: translateY(10px); /* Initial slight offset */
+        }
+        .hotspot.active + .hotspot-tooltip {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0); /* Slide up effect */
+        }
+        .smooth-scroll {
+             scroll-behavior: smooth;
+        }
+        section {
+            padding-top: 100px; /* More padding at top */
+            margin-top: -100px; /* Adjust margin-top for fixed header */
+        }
+        .simulator-scenario {
+            background-color: #ffffff;
+            border-radius: 0.75rem; /* More rounded */
+            box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Enhanced shadow */
+            padding: 2rem; /* More padding */
+            position: relative;
+        }
+        .ransomware-screen {
+            background-color: #1c2a38; /* Slightly less harsh dark background */
+            color: #ff6b6b; /* Brighter red text */
+            padding: 2.5rem; /* More padding */
+            border-radius: 0.75rem;
+            font-family: 'monospace';
+            position: relative;
+            min-height: 350px; /* Taller */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.5); /* Inner shadow for screen effect */
+        }
+        .ransomware-file {
+            background-color: #3f5163; /* Darker blue-gray */
+            color: #a0aec0;
+            padding: 0.6rem 1.2rem; /* More padding */
+            border-radius: 0.35rem; /* More rounded */
+            margin: 0.3rem;
+            display: inline-block;
+            font-size: 0.9rem;
+        }
+        .hero-background-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at 10% 20%, rgba(0, 119, 182, 0.05) 0%, transparent 50%),
+                              radial-gradient(circle at 90% 80%, rgba(0, 119, 182, 0.05) 0%, transparent 50%);
+            background-size: 400px 400px;
+            opacity: 0.7;
+            z-index: -1;
+        }
+
+        /* Modal specific styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        }
+        .modal-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background-color: #ffffff;
+            padding: 2.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 90%;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease-in-out;
+        }
+        .modal-overlay.visible .modal-content {
+            transform: translateY(0);
+        }
+        .modal-close-button {
+            background: none;
+            border: none;
+            font-size: 2.5rem;
+            color: #6b7280;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .modal-close-button:hover {
+            color: #4b5563;
+        }
+    </style>
+</head>
+<body class="smooth-scroll">
+
+    <header class="bg-white shadow-lg sticky top-0 z-50">
+        <nav class="container mx-auto px-8 py-5 flex justify-between items-center">
+            <div class="text-3xl font-bold text-blue-700">Norma IT</div>
+            <div class="hidden md:flex space-x-10">
+                <a href="#ameacas-comuns" class="nav-link text-lg font-medium text-gray-700 hover:text-blue-700 border-b-2 border-transparent pb-1">Ameaças Comuns</a>
+                <a href="#simuladores" class="nav-link text-lg font-medium text-gray-700 hover:text-blue-700 border-b-2 border-transparent pb-1">Simuladores</a>
+                <a href="#protecao" class="nav-link text-lg font-medium text-gray-700 hover:text-blue-700 border-b-2 border-transparent pb-1">Fortaleça sua Defesa</a>
+                <a href="#como-agir" class="nav-link text-lg font-medium text-gray-700 hover:text-blue-700 border-b-2 border-transparent pb-1">Fui Afetado, e Agora?</a>
+            </div>
+             <button id="mobile-menu-button" class="md:hidden p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <span class="text-3xl text-gray-700">☰</span>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-8 pb-4 bg-white">
+            <a href="#ameacas-comuns" class="block py-3 text-lg nav-link text-gray-700 hover:text-blue-700">Ameaças Comuns</a>
+            <a href="#simuladores" class="block py-3 text-lg nav-link text-gray-700 hover:text-blue-700">Simuladores</a>
+            <a href="#protecao" class="block py-3 text-lg nav-link text-gray-700 hover:text-blue-700">Fortaleça sua Defesa</a>
+            <a href="#como-agir" class="block py-3 text-lg nav-link text-gray-700 hover:text-blue-700">Fui Afetado, e Agora?</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-8 py-16">
+        <section id="hero" class="text-center mb-24 relative overflow-hidden rounded-xl bg-gradient-to-br from-blue-50 to-white py-20 shadow-inner">
+            <div class="hero-background-pattern"></div>
+            <h1 class="text-5xl md:text-6xl font-extrabold text-gray-800 mb-6 relative z-10 leading-tight">Guia Completo de Segurança Cibernética <br class="block mt-4"> <span class="text-blue-700">NORMA Group</span></h1>
+            <p class="text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto relative z-10">Este guia interativo aborda as principais ameaças cibernéticas e ensina como proteger sua vida digital no ambiente corporativo e pessoal.</p>
+        </section>
+
+        <section id="ameacas-comuns" class="mb-24">
+            <h2 class="text-4xl font-bold text-center mb-4 text-gray-800">Ameaças Cibernéticas Comuns</h2>
+            <p class="text-center text-gray-600 mb-12 max-w-3xl mx-auto">O cenário digital apresenta diversos riscos. Clique em cada ameaça para saber mais sobre ela.</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <div class="card bg-white p-8 rounded-xl shadow-md cursor-pointer transform hover:scale-105" data-threat-id="phishing-email">
+                    <h3 class="font-bold text-2xl mb-3 text-blue-800">📧 Phishing por E-mail</h3>
+                    <p class="text-gray-700">Tentativas de fraude que usam e-mails falsos para enganar você e roubar informações.</p>
+                </div>
+                <div class="card bg-white p-8 rounded-xl shadow-md cursor-pointer transform hover:scale-105" data-threat-id="spear-phishing">
+                    <h3 class="font-bold text-2xl mb-3 text-blue-800">🎯 Spear Phishing</h3>
+                    <p class="text-gray-700">Um ataque de phishing altamente direcionado e personalizado.</p>
+                </div>
+                <div class="card bg-white p-8 rounded-xl shadow-md cursor-pointer transform hover:scale-105" data-threat-id="sites-falsos">
+                    <h3 class="font-bold text-2xl mb-3 text-blue-800">🌐 Sites Falsos</h3>
+                    <p class="text-gray-700">Páginas da web que imitam perfeitamente sites legítimos para roubar credenciais.</p>
+                </div>
+                <div class="card bg-white p-8 rounded-xl shadow-md cursor-pointer transform hover:scale-105" data-threat-id="engenharia-social">
+                    <h3 class="font-bold text-2xl mb-3 text-blue-800">🧑‍💻 Engenharia Social</h3>
+                    <p class="text-gray-700">Manipulação psicológica para induzir pessoas a realizar ações ou divulgar informações.</p>
+                </div>
+                <div class="card bg-white p-8 rounded-xl shadow-md cursor-pointer transform hover:scale-105" data-threat-id="ransomware">
+                    <h3 class="font-bold text-2xl mb-3 text-blue-800">🔒 Ransomware</h3>
+                    <p class="text-gray-700">Malware que criptografa arquivos e exige resgate para restaurar o acesso.</p>
+                </div>
+                <div class="card bg-white p-8 rounded-xl shadow-md cursor-pointer transform hover:scale-105" data-threat-id="malware">
+                    <h3 class="font-bold text-2xl mb-3 text-blue-800">🦠 Malware (Vírus, Cavalos de Troia)</h3>
+                    <p class="text-gray-700">Software malicioso projetado para danificar, desabilitar ou roubar dados.</p>
+                </div>
+            </div>
+
+            <!-- Threat Explanation Modal -->
+            <div id="threat-modal-overlay" class="modal-overlay">
+                <div class="modal-content">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 id="modal-threat-title" class="font-bold text-3xl text-blue-900"></h3>
+                        <button id="modal-close-button" class="modal-close-button">&times;</button>
+                    </div>
+                    <p id="modal-threat-text" class="text-gray-700 text-lg leading-relaxed"></p>
+                </div>
+            </div>
+        </section>
+
+        <section id="simuladores" class="mb-24">
+            <h2 class="text-4xl font-bold text-center mb-4 text-gray-800">Simuladores Interativos</h2>
+            <p class="text-center text-gray-600 mb-12 max-w-3xl mx-auto">Coloque seu conhecimento em prática! Clique nos pontos de alerta <span class="text-red-500 font-bold">(!)</span> para identificar as ameaças e aprender a se proteger.</p>
+
+            <div id="phishing-simulator" class="mb-20">
+                <h3 class="text-3xl font-bold text-center mb-8 text-gray-800">Simulador: Identificando Sinais de Phishing</h3>
+                <div class="flex flex-col lg:flex-row gap-10">
+                    <div class="w-full bg-white p-6 sm:p-8 rounded-xl shadow-lg relative simulator-scenario">
+                        <div class="border border-gray-200 rounded-lg p-5 bg-gray-50">
+                            <div class="flex justify-between items-center border-b border-gray-200 pb-3 mb-3">
+                                <div class="relative">
+                                    <p class="text-base"><b>De:</b> Banco Seguro &lt;seguranca-update@bancoseguro.info&gt;</p>
+                                    <div id="hotspot-phishing-1" class="hotspot" style="top: -8px; right: -30px;">!</div>
+                                    <div class="hotspot-tooltip" style="top: -70px; left: 50%; transform: translateX(-50%);">
+                                        <strong>Remetente Suspeito:</strong> Domínios incomuns como ".info" ou com erros de grafia são um grande alerta. Bancos usam seus domínios oficiais.
+                                    </div>
+                                </div>
+                                <span class="text-sm text-gray-500">2 min atrás</span>
+                            </div>
+                            <div class="border-b border-gray-200 pb-3 mb-5">
+                                <div class="relative">
+                                    <p class="text-base"><b>Assunto:</b> ALERTA URGENTE: Atividade suspeita em sua conta!</p>
+                                    <div id="hotspot-phishing-2" class="hotspot" style="top: -8px; right: -30px;">!</div>
+                                    <div class="hotspot-tooltip" style="top: -70px; left: 50%; transform: translateX(-50%);">
+                                        <strong>Tom Alarmista:</strong> Golpistas criam um senso de urgência para que você aja sem pensar. Desconfie de mensagens que exigem ação imediata.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-base space-y-5">
+                                <div class="relative">
+                                    <p>Prezado Cliente,</p>
+                                    <div id="hotspot-phishing-3" class="hotspot" style="top: -8px; right: -30px;">!</div>
+                                    <div class="hotspot-tooltip" style="top: -70px; left: 50%; transform: translateX(-50%);">
+                                        <strong>Saudação Genérica:</strong> Empresas legítimas geralmente usam seu nome. "Prezado Cliente" é impessoal e um sinal comum de e-mails em massa.
+                                    </div>
+                                </div>
+                                <p>Detectamos uma atividade suspeita em sua conta a partir de uma localização não reconhecida. Por motivos de segurança, sua conta foi temporariamente bloqueada.</p>
+                                <div class="relative">
+                                    <p>Para restaurar seu acesso, por favor, clique no link abaixo e verifique suas informações imediatamente.</p>
+                                    <div id="hotspot-phishing-4" class="hotspot" style="top: 25px; right: -30px;">!</div>
+                                    <div class="hotspot-tooltip" style="top: 10px; left: 50%; transform: translateX(-50%);">
+                                        <strong>Links Perigosos:</strong> Passe o mouse sobre o link (sem clicar) para ver o destino real. Golpistas usam links que parecem legítimos, mas levam a sites falsos.
+                                    </div>
+                                </div>
+                                <p class="mt-5"><a href="#" class="text-blue-600 underline text-lg">https://bancoseguro.info/recuperacao/login-id-123</a></p>
+                                <p>Se a verificação não for concluída em 24 horas, sua conta será permanentemente encerrada.</p>
+                                <p>Atenciosamente,<br>Equipe de Segurança<br>Banco Seguro</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="social-engineering-simulator" class="mb-20">
+                <h3 class="text-3xl font-bold text-center mb-8 text-gray-800">Simulador: Reconhecendo Engenharia Social</h3>
+                <div class="flex flex-col lg:flex-row gap-10">
+                    <div class="w-full bg-white p-6 sm:p-8 rounded-xl shadow-lg relative simulator-scenario">
+                        <p class="text-base mb-5">Você recebe uma ligação. A pessoa se apresenta como "Suporte Técnico Global" e diz que detectou um problema crítico em seu computador que precisa ser resolvido imediatamente.</p>
+                        <div class="border border-gray-200 rounded-lg p-5 bg-gray-50">
+                            <div class="relative mb-5">
+                                <p class="font-bold text-lg">Chamada de Suporte Técnico</p>
+                                <div id="hotspot-social-1" class="hotspot" style="top: -8px; right: -30px;">!</div>
+                                <div class="hotspot-tooltip" style="top: -70px; left: 50%; transform: translateX(-50%);">
+                                    <strong>Ligação Inesperada:</strong> Empresas legítimas raramente ligam sem aviso prévio sobre problemas técnicos. Desconfie de chamadas não solicitadas.
+                                </div>
+                            </div>
+                            <div class="relative mb-5">
+                                <p><b>Voz:</b> "Olá, sou do Suporte Técnico Global. Identificamos atividades incomuns no seu sistema. Precisamos que você acesse este site e baixe uma ferramenta de diagnóstico para resolver."</p>
+                                <div id="hotspot-social-2" class="hotspot" style="top: 25px; right: -30px;">!</div>
+                                <div class="hotspot-tooltip" style="top: 10px; left: 50%; transform: translateX(-50%);">
+                                    <strong>Urgência e Pressão:</strong> O golpista cria um senso de urgência para que você não tenha tempo de pensar ou verificar.
+                                </div>
+                            </div>
+                            <div class="relative mb-5">
+                                <p><b>Voz:</b> "Nosso sistema mostra que seu computador está vulnerável. Se não agir agora, seus dados podem ser perdidos. Qual o seu nome de usuário e senha para que eu possa te guiar?"</p>
+                                <div id="hotspot-social-3" class="hotspot" style="top: 25px; right: -30px;">!</div>
+                                <div class="hotspot-tooltip" style="top: 10px; left: 50%; transform: translateX(-50%);">
+                                    <strong>Solicitação de Credenciais:</strong> NUNCA forneça senhas ou informações sensíveis por telefone, mesmo que a pessoa pareça legítima. O suporte técnico real não pede sua senha.
+                                </div>
+                            </div>
+                            <p class="text-base italic text-gray-700">O que você faria?</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="ransomware-simulator">
+                <h3 class="text-3xl font-bold text-center mb-8 text-gray-800">Simulador: Identificando Ransomware</h3>
+                <div class="flex flex-col lg:flex-row gap-10">
+                    <div class="w-full bg-white p-6 sm:p-8 rounded-xl shadow-lg relative simulator-scenario">
+                        <p class="text-base mb-5">Você liga seu computador e se depara com esta tela. Seus arquivos parecem ter sido alterados.</p>
+                        <div class="ransomware-screen">
+                            <h4 class="text-4xl font-bold mb-6">SEUS ARQUIVOS FORAM CRIPTOGRAFADOS!</h4>
+                            <div class="relative mb-8">
+                                <p class="text-xl">Todos os seus documentos, fotos, bancos de dados e outros arquivos importantes foram criptografados com o algoritmo mais forte.</p>
+                                <div id="hotspot-ransom-1" class="hotspot" style="top: -8px; right: -30px;">!</div>
+                                <div class="hotspot-tooltip" style="top: -70px; left: 50%; transform: translateX(-50%);">
+                                    <strong>Criptografia de Arquivos:</strong> A principal característica do ransomware é o bloqueio do acesso aos seus dados.
+                                </div>
+                            </div>
+                            <div class="relative mb-8">
+                                <p class="text-xl">Ninguém pode recuperar seus arquivos sem nossa chave de descriptografia única.</p>
+                                <div id="hotspot-ransom-2" class="hotspot" style="top: -8px; right: -30px;">!</div>
+                                <div class="hotspot-tooltip" style="top: -70px; left: 50%; transform: translateX(-50%);">
+                                    <strong>Demanda de Resgate:</strong> A mensagem exige um pagamento (geralmente em criptomoeda) para liberar seus arquivos.
+                                </div>
+                            </div>
+                            <div class="relative mb-8">
+                                <p class="text-2xl font-bold">Para recuperar seus arquivos, você deve pagar 0.5 BTC para o endereço XXXXXXXX em 48 horas.</p>
+                                <div id="hotspot-ransom-3" class="hotspot" style="top: 25px; right: -30px;">!</div>
+                                <div class="hotspot-tooltip" style="top: 10px; left: 50%; transform: translateX(-50%);">
+                                    <strong>Prazo e Criptomoeda:</strong> Ransomware frequentemente impõe prazos e exige pagamentos em moedas difíceis de rastrear.
+                                </div>
+                            </div>
+                            <p class="text-base mt-6">Seus arquivos agora terminam com a extensão: <span class="font-bold text-yellow-300">.locked</span></p>
+                            <div class="text-base mt-3">
+                                <span class="ransomware-file">documento.docx.locked</span>
+                                <span class="ransomware-file">foto.jpg.locked</span>
+                                <span class="ransomware-file">planilha.xlsx.locked</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="protecao" class="mb-24">
+            <h2 class="text-4xl font-bold text-center mb-4 text-gray-800">Fortaleça sua Defesa Cibernética</h2>
+            <p class="text-center text-gray-600 mb-12 max-w-3xl mx-auto">A prevenção é a melhor estratégia contra todas as ameaças digitais. Adote estes hábitos para aumentar drasticamente sua segurança online.</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <div class="card bg-white p-8 rounded-xl shadow-md text-center transform hover:scale-105">
+                    <span class="text-6xl mb-3 block">🔑</span>
+                    <h3 class="font-bold text-2xl my-2 text-blue-800">Senhas Fortes e Únicas</h3>
+                    <p class="text-gray-700">Use uma combinação de letras, números e símbolos. Mais importante: não repita senhas em diferentes serviços.</p>
+                </div>
+                <div class="card bg-white p-8 rounded-xl shadow-md text-center transform hover:scale-105">
+                    <span class="text-6xl mb-3 block">📱</span>
+                    <h3 class="font-bold text-2xl my-2 text-blue-800">Autenticação de 2 Fatores (2FA)</h3>
+                    <p class="text-gray-700">Ative esta camada extra de segurança. Mesmo que roubem sua senha, não conseguirão acessar sua conta sem seu celular.</p>
+                </div>
+                <div class="card bg-white p-8 rounded-xl shadow-md text-center transform hover:scale-105">
+                    <span class="text-6xl mb-3 block">🔄</span>
+                    <h3 class="font-bold text-2xl my-2 text-blue-800">Mantenha Tudo Atualizado</h3>
+                    <p class="text-gray-700">Atualizações de software e aplicativos corrigem falhas de segurança. Mantenha seu sistema operacional e navegador sempre em dia.</p>
+                </div>
+                <div class="card bg-white p-8 rounded-xl shadow-md text-center transform hover:scale-105">
+                    <span class="text-6xl mb-3 block">🧐</span>
+                    <h3 class="font-bold text-2xl my-2 text-blue-800">Pense Antes de Clicar</h3>
+                    <p class="text-gray-700">A desconfiança é sua aliada. Na dúvida, não clique. Acesse o site oficial da empresa diretamente pelo seu navegador.</p>
+                </div>
+                <div class="card bg-white p-8 rounded-xl shadow-md text-center transform hover:scale-105">
+                    <span class="text-6xl mb-3 block">🛡️</span>
+                    <h3 class="font-bold text-2xl my-2 text-blue-800">Use Redes Seguras</h3>
+                    <p class="text-gray-700">Evite redes Wi-Fi públicas para transações sensíveis, como compras online ou acesso ao banco. Prefira sua rede de casa ou dados móveis.</p>
+                </div>
+                <div class="card bg-white p-8 rounded-xl shadow-md text-center transform hover:scale-105">
+                    <span class="text-6xl mb-3 block">🗑️</span>
+                    <h3 class="font-bold text-2xl my-2 text-blue-800">Cuidado com o que Compartilha</h3>
+                    <p class="text-gray-700">Revise as configurações de privacidade de suas redes sociais e seja seletivo com as informações que você torna públicas online.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="como-agir" class="mb-24">
+            <h2 class="text-4xl font-bold text-center mb-4 text-gray-800">Fui Afetado, e Agora?</h2>
+             <p class="text-center text-gray-600 mb-12 max-w-3xl mx-auto">Se você acha que foi vítima de um incidente cibernético, agir rápido pode minimizar os danos. Siga estes passos imediatamente.</p>
+            <div class="max-w-3xl mx-auto">
+                <div class="space-y-8">
+                    <div class="flex items-start bg-white p-6 rounded-xl shadow-md">
+                        <div class="flex-shrink-0 bg-blue-600 text-white w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl shadow-md">1</div>
+                        <div class="ml-5">
+                            <h3 class="font-bold text-2xl text-black underline mb-1">Reporte ao time de SOC</h3>
+                            <p class="text-lg text-gray-700 leading-relaxed">Comunique o incidente imediatamente à equipe de Segurança de Operações (SOC) abrindo um ticket em "IT Service Portal > Report Incident > Security Event / Incident".<br>Para e-mails suspeitos, utilize o botão "Report Phishing" do Outlook, que envia a mensagem para análise da equipe de segurança.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start bg-white p-6 rounded-xl shadow-md">
+                        <div class="flex-shrink-0 bg-blue-600 text-white w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl">2</div>
+                        <div class="ml-5">
+                            <h3 class="font-bold text-2xl text-black underline mb-1">Altere Senhas Corporativas</h3>
+                            <p class="text-lg text-gray-700 leading-relaxed">Se suas credenciais corporativas foram comprometidas, altere imediatamente todas as senhas relacionadas a sistemas e aplicações da empresa. Utilize o gerenciador de senhas corporativo, se houver.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start bg-white p-6 rounded-xl shadow-md">
+                        <div class="flex-shrink-0 bg-blue-600 text-white w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl">3</div>
+                        <div class="ml-5">
+                            <h3 class="font-bold text-2xl text-black underline mb-1">Desconecte Dispositivos (se aplicável)</h3>
+                            <p class="text-lg text-gray-700 leading-relaxed">Se um dispositivo corporativo (laptop, celular) foi comprometido, desconecte-o da rede da empresa (Wi-Fi, VPN) para evitar a propagação da ameaça.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-20 py-10">
+        <div class="container mx-auto px-8 text-center">
+            <p class="text-lg">&copy; 2025 Norma IT. Mantenha-se informado, mantenha-se seguro.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            const mobileNavLinks = mobileMenu.querySelectorAll('a');
+            mobileNavLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+
+            // Threat explanation modal logic
+            const threatCards = document.querySelectorAll('#ameacas-comuns .card');
+            const threatModalOverlay = document.getElementById('threat-modal-overlay');
+            const modalThreatTitle = document.getElementById('modal-threat-title');
+            const modalThreatText = document.getElementById('modal-threat-text');
+            const modalCloseButton = document.getElementById('modal-close-button');
+
+            const threatExplanations = {
+                'phishing-email': {
+                    title: 'Phishing por E-mail',
+                    text: 'Tentativas de fraude que usam e-mails falsos para enganar você e roubar informações confidenciais como senhas, dados bancários e números de cartão de crédito. Frequentemente, esses e-mails imitam organizações legítimas.'
+                },
+                'spear-phishing': {
+                    title: 'Spear Phishing',
+                    text: 'Um ataque de phishing altamente direcionado e personalizado a um indivíduo ou organização específica. Os golpistas pesquisam a vítima para tornar a comunicação extremamente convincente e difícil de detectar.'
+                },
+                'sites-falsos': {
+                    title: 'Sites Falsos',
+                    text: 'Páginas da web fraudulentas que imitam perfeitamente sites legítimos (bancos, lojas, redes sociais) com o objetivo de roubar suas credenciais de login e outras informações pessoais quando você as insere.'
+                },
+                'engenharia-social': {
+                    title: 'Engenharia Social',
+                    text: 'Uma tática que explora a psicologia humana, em vez de falhas técnicas, para manipular indivíduos a realizar ações ou divulgar informações confidenciais. Isso pode incluir pretexting, baiting, quid pro quo, intimidação e uso de familiaridade.'
+                },
+                'ransomware': {
+                    title: 'Ransomware',
+                    text: 'Um tipo de software malicioso que criptografa os arquivos do usuário ou bloqueia o acesso ao sistema, exigindo um pagamento de resgate (geralmente em criptomoedas) para restaurar o acesso. É uma ameaça crescente e muito disruptiva.'
+                },
+                'malware': {
+                    title: 'Malware (Vírus, Cavalos de Troia)',
+                    text: 'Termo genérico para software malicioso projetado para danificar, desabilitar, roubar dados ou obter acesso não autorizado a sistemas de computador. Inclui vírus (que se replicam), cavalos de Troia (disfarçados de software legítimo) e spyware (que monitora atividades).'
+                }
+            };
+
+            threatCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const threatId = card.dataset.threatId;
+                    const explanation = threatExplanations[threatId];
+
+                    if (explanation) {
+                        modalThreatTitle.textContent = explanation.title;
+                        modalThreatText.textContent = explanation.text;
+                        threatModalOverlay.classList.add('visible');
+                    }
+                });
+            });
+
+            modalCloseButton.addEventListener('click', () => {
+                threatModalOverlay.classList.remove('visible');
+            });
+
+            threatModalOverlay.addEventListener('click', (e) => {
+                if (e.target === threatModalOverlay) {
+                    threatModalOverlay.classList.remove('visible');
+                }
+            });
+
+
+            // Hotspot logic for simulators
+            const allHotspots = document.querySelectorAll('.hotspot');
+            allHotspots.forEach(hotspot => {
+                hotspot.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent document click from immediately closing it
+
+                    // Close any currently active hotspot's tooltip
+                    const currentlyActiveHotspot = document.querySelector('.hotspot.active');
+                    if (currentlyActiveHotspot && currentlyActiveHotspot !== hotspot) {
+                        currentlyActiveHotspot.classList.remove('active');
+                    }
+
+                    // Toggle active class on clicked hotspot
+                    hotspot.classList.toggle('active');
+                });
+            });
+            
+            // Close tooltip if clicked anywhere else on the document
+            document.addEventListener('click', (e) => {
+                const activeHotspot = document.querySelector('.hotspot.active');
+                if (activeHotspot && !e.target.closest('.hotspot') && !e.target.closest('.hotspot-tooltip')) {
+                    activeHotspot.classList.remove('active');
+                }
+            });
+
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('section[id]');
+            
+            function changeNav() {
+                let index = sections.length;
+
+                while(--index && window.scrollY + 100 < sections[index].offsetTop) {}
+                
+                navLinks.forEach((link) => link.classList.remove('active'));
+                
+                const activeLink = document.querySelector(`.nav-link[href="#${sections[index].id}"]`);
+                if(activeLink) {
+                   activeLink.classList.add('active');
+                }
+            }
+
+            changeNav();
+            window.addEventListener('scroll', changeNav);
+        });
+    </script>
+</body>
+</html>
