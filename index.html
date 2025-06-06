@@ -113,17 +113,27 @@
             display: inline-block;
             font-size: 0.9rem;
         }
-        .hero-background-pattern {
+        /* Hero section specific styles with image background */
+        .hero-section-bg {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: radial-gradient(circle at 10% 20%, rgba(0, 119, 182, 0.05) 0%, transparent 50%),
-                              radial-gradient(circle at 90% 80%, rgba(0, 119, 182, 0.05) 0%, transparent 50%);
-            background-size: 400px 400px;
-            opacity: 0.7;
-            z-index: -1;
+            background-image: url('https://www.google.com/url?sa=i&url=https%3A%2F%2Fpt.pngtree.com%2Ffreebackground%2Fa-world-map-made-of-glowing-connections-representing-global-connectivity-and-the-flow-information-across-continents_16280378.html&psig=AOvVaw0n-D3EE6swW8gK9hsUjxVD&ust=1749315912556000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCMj4vt6j3Y0DFQAAAAAdAAAAABAX'); /* Placeholder image */
+            background-size: cover;
+            background-position: center;
+            opacity: 0.2; /* Translucent effect */
+            z-index: 0;
+        }
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); /* Dark overlay for text readability */
+            z-index: 1;
         }
 
         /* Modal specific styles */
@@ -196,10 +206,11 @@
     </header>
 
     <main class="container mx-auto px-8 py-16">
-        <section id="hero" class="text-center mb-24 relative overflow-hidden rounded-xl bg-gradient-to-br from-blue-50 to-white py-20 shadow-inner">
-            <div class="hero-background-pattern"></div>
-            <h1 class="text-5xl md:text-6xl font-extrabold text-gray-800 mb-6 relative z-10 leading-tight">Guia Completo de Segurança Cibernética <br class="block mt-4"> <span class="text-blue-700">NORMA Group</span></h1>
-            <p class="text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto relative z-10">Este guia interativo aborda as principais ameaças cibernéticas e ensina como proteger sua vida digital no ambiente corporativo e pessoal.</p>
+        <section id="hero" class="text-center mb-24 relative overflow-hidden rounded-xl py-20 shadow-xl">
+            <div class="hero-section-bg"></div>
+            <div class="hero-overlay"></div>
+            <h1 class="text-5xl md:text-6xl font-extrabold text-white mb-6 relative z-20 leading-tight">Guia Completo de Segurança Cibernética <br class="block my-2"> <span class="text-blue-400 text-6xl md:text-7xl block mt-8 tracking-wider">NORMA Group</span></h1>
+            <p class="text-xl md:text-2xl text-blue-200 max-w-4xl mx-auto relative z-20">Este guia interativo aborda as principais ameaças cibernéticas e ensina como proteger sua vida digital no ambiente corporativo e pessoal.</p>
         </section>
 
         <section id="ameacas-comuns" class="mb-24">
@@ -355,7 +366,7 @@
                                 <p class="text-2xl font-bold">Para recuperar seus arquivos, você deve pagar 0.5 BTC para o endereço XXXXXXXX em 48 horas.</p>
                                 <div id="hotspot-ransom-3" class="hotspot" style="top: 25px; right: -30px;">!</div>
                                 <div class="hotspot-tooltip" style="top: 10px; left: 50%; transform: translateX(-50%);">
-                                    <strong>Prazo e Criptomoeda:</strong> Ransomware frequentemente impõe prazos e exige pagamentos em moedas difíceis de rastrear.
+                                    <strong>Prazo e Criptomoeda:</b> Ransomware frequentemente impõe prazos e exige pagamentos em moedas difíceis de rastrear.
                                 </div>
                             </div>
                             <p class="text-base mt-6">Seus arquivos agora terminam com a extensão: <span class="font-bold text-yellow-300">.locked</span></p>
