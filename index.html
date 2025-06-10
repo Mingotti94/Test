@@ -120,20 +120,12 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('https://github.com/Mingotti94/Test/blob/af14b7e08a4d42d96f25756d19303250efc31e3c/worldconnections.jpg'); /* Placeholder image */
-            background-size: cover;
-            background-position: center;
-            opacity: 0.2; /* Translucent effect */
+            background-color: transparent; /* No image */
             z-index: 0;
         }
         .hero-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6); /* Dark overlay for text readability */
-            z-index: 1;
+            /* Removed as it's not needed without the image */
+            display: none;
         }
 
         /* Modal specific styles */
@@ -186,35 +178,34 @@
 
     <header class="bg-white shadow-lg sticky top-0 z-50">
         <nav class="container mx-auto px-8 py-5 flex justify-between items-center">
-            <div class="text-3xl font-bold text-blue-700">Norma IT</div>
+            <div class="text-3xl font-bold text-blue-700">IT&BPM</div>
             <div class="hidden md:flex space-x-10">
-                <a href="#ameacas-comuns" class="nav-link text-lg font-medium text-gray-700 hover:text-blue-700 border-b-2 border-transparent pb-1">Ameaças Comuns</a>
+                <a href="#ameacas-comuns" class="nav-link text-lg font-medium text-gray-700 hover:text-blue-700 border-b-2 border-transparent pb-1">Ameaças comuns</a>
                 <a href="#simuladores" class="nav-link text-lg font-medium text-gray-700 hover:text-blue-700 border-b-2 border-transparent pb-1">Simuladores</a>
-                <a href="#protecao" class="nav-link text-lg font-medium text-gray-700 hover:text-blue-700 border-b-2 border-transparent pb-1">Fortaleça sua Defesa</a>
-                <a href="#como-agir" class="nav-link text-lg font-medium text-gray-700 hover:text-blue-700 border-b-2 border-transparent pb-1">Fui Afetado, e Agora?</a>
+                <a href="#protecao" class="nav-link text-lg font-medium text-gray-700 hover:text-blue-700 border-b-2 border-transparent pb-1">Fortaleça sua defesa</a>
+                <a href="#como-agir" class="nav-link text-lg font-medium text-gray-700 hover:text-blue-700 border-b-2 border-transparent pb-1">Fui afetado e agora?</a>
             </div>
              <button id="mobile-menu-button" class="md:hidden p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <span class="text-3xl text-gray-700">☰</span>
             </button>
         </nav>
         <div id="mobile-menu" class="hidden md:hidden px-8 pb-4 bg-white">
-            <a href="#ameacas-comuns" class="block py-3 text-lg nav-link text-gray-700 hover:text-blue-700">Ameaças Comuns</a>
+            <a href="#ameacas-comuns" class="block py-3 text-lg nav-link text-gray-700 hover:text-blue-700">Ameaça comuns</a>
             <a href="#simuladores" class="block py-3 text-lg nav-link text-gray-700 hover:text-blue-700">Simuladores</a>
-            <a href="#protecao" class="block py-3 text-lg nav-link text-gray-700 hover:text-blue-700">Fortaleça sua Defesa</a>
-            <a href="#como-agir" class="block py-3 text-lg nav-link text-gray-700 hover:text-blue-700">Fui Afetado, e Agora?</a>
+            <a href="#protecao" class="block py-3 text-lg nav-link text-gray-700 hover:text-blue-700">Fortaleça sua defesa</a>
+            <a href="#como-agir" class="block py-3 text-lg nav-link text-gray-700 hover:text-blue-700">Fui afetado e agora?</a>
         </div>
     </header>
 
     <main class="container mx-auto px-8 py-16">
         <section id="hero" class="text-center mb-24 relative overflow-hidden rounded-xl py-20 shadow-xl">
-            <div class="hero-section-bg"></div>
-            <div class="hero-overlay"></div>
+            <div class="absolute inset-0 bg-gradient-to-br from-gray-900 to-blue-950 opacity-95 z-0"></div>
             <h1 class="text-5xl md:text-6xl font-extrabold text-white mb-6 relative z-20 leading-tight">Guia Completo de Segurança Cibernética <br class="block my-2"> <span class="text-blue-400 text-6xl md:text-7xl block mt-8 tracking-wider">NORMA Group</span></h1>
             <p class="text-xl md:text-2xl text-blue-200 max-w-4xl mx-auto relative z-20">Este guia interativo aborda as principais ameaças cibernéticas e ensina como proteger sua vida digital no ambiente corporativo e pessoal.</p>
         </section>
 
         <section id="ameacas-comuns" class="mb-24">
-            <h2 class="text-4xl font-bold text-center mb-4 text-gray-800">Ameaças Cibernéticas Comuns</h2>
+            <h2 class="text-4xl font-bold text-center mb-4 text-gray-800">Ameaças cibernéticas comuns</h2>
             <p class="text-center text-gray-600 mb-12 max-w-3xl mx-auto">O cenário digital apresenta diversos riscos. Clique em cada ameaça para saber mais sobre ela.</p>
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
                 <div class="card bg-white p-8 rounded-xl shadow-md cursor-pointer transform hover:scale-105" data-threat-id="phishing-email">
@@ -392,8 +383,8 @@
                 </div>
                 <div class="card bg-white p-8 rounded-xl shadow-md text-center transform hover:scale-105">
                     <span class="text-6xl mb-3 block">📱</span>
-                    <h3 class="font-bold text-2xl my-2 text-blue-800">Autenticação de 2 Fatores (2FA)</h3>
-                    <p class="text-gray-700">Ative esta camada extra de segurança. Mesmo que roubem sua senha, não conseguirão acessar sua conta sem seu celular.</p>
+                    <h3 class="font-bold text-2xl my-2 text-blue-800">Autenticação Multifator (MFA)</h3>
+                    <p class="text-gray-700">Mesmo que saibam sua senha, não conseguirão acessar sua conta sem seu celular. A Norma Group recomenda o uso do Microsoft Authenticator.</p>
                 </div>
                 <div class="card bg-white p-8 rounded-xl shadow-md text-center transform hover:scale-105">
                     <span class="text-6xl mb-3 block">🔄</span>
@@ -408,18 +399,18 @@
                 <div class="card bg-white p-8 rounded-xl shadow-md text-center transform hover:scale-105">
                     <span class="text-6xl mb-3 block">🛡️</span>
                     <h3 class="font-bold text-2xl my-2 text-blue-800">Use Redes Seguras</h3>
-                    <p class="text-gray-700">Evite redes Wi-Fi públicas para transações sensíveis, como compras online ou acesso ao banco. Prefira sua rede de casa ou dados móveis.</p>
+                    <p class="text-gray-700">Evite redes Wi-Fi públicas para transações sensíveis, como compras online ou acesso ao banco. Prefira sua rede de casa, empresa ou dados móveis.</p>
                 </div>
-                <div class="card bg-white p-8 rounded-xl shadow-md text-center transform hover:scale-105">
-                    <span class="text-6xl mb-3 block">🗑️</span>
-                    <h3 class="font-bold text-2xl my-2 text-blue-800">Cuidado com o que Compartilha</h3>
-                    <p class="text-gray-700">Revise as configurações de privacidade de suas redes sociais e seja seletivo com as informações que você torna públicas online.</p>
+                <div class="card bg-white p-8 rounded-xl shadow-md text-center transform hover:scale-105" data-threat-id="ia-responsavel">
+                    <span class="text-6xl mb-3 block">🤖</span>
+                    <h3 class="font-bold text-2xl my-2 text-blue-800">Uso Responsável de IA</h3>
+                    <p class="text-gray-700">A importância de utilizar ferramentas de Inteligência Artificial de forma segura e que preserve a privacidade. O Microsoft Copilot é a ferramenta de IA indicada pela Norma Group.</p>
                 </div>
             </div>
         </section>
 
         <section id="como-agir" class="mb-24">
-            <h2 class="text-4xl font-bold text-center mb-4 text-gray-800">Fui Afetado, e Agora?</h2>
+            <h2 class="text-4xl font-bold text-center mb-4 text-gray-800">Fui afetado e agora?</h2>
              <p class="text-center text-gray-600 mb-12 max-w-3xl mx-auto">Se você acha que foi vítima de um incidente cibernético, agir rápido pode minimizar os danos. Siga estes passos imediatamente.</p>
             <div class="max-w-3xl mx-auto">
                 <div class="space-y-8">
@@ -433,14 +424,14 @@
                     <div class="flex items-start bg-white p-6 rounded-xl shadow-md">
                         <div class="flex-shrink-0 bg-blue-600 text-white w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl">2</div>
                         <div class="ml-5">
-                            <h3 class="font-bold text-2xl text-black underline mb-1">Altere Senhas Corporativas</h3>
+                            <h3 class="font-bold text-2xl text-black underline mb-1">Altere senhas corporativas</h3>
                             <p class="text-lg text-gray-700 leading-relaxed">Se suas credenciais corporativas foram comprometidas, altere imediatamente todas as senhas relacionadas a sistemas e aplicações da empresa. Utilize o gerenciador de senhas corporativo, se houver.</p>
                         </div>
                     </div>
                     <div class="flex items-start bg-white p-6 rounded-xl shadow-md">
                         <div class="flex-shrink-0 bg-blue-600 text-white w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl">3</div>
                         <div class="ml-5">
-                            <h3 class="font-bold text-2xl text-black underline mb-1">Desconecte Dispositivos (se aplicável)</h3>
+                            <h3 class="font-bold text-2xl text-black underline mb-1">Desconecte dispositivos (se aplicável)</h3>
                             <p class="text-lg text-gray-700 leading-relaxed">Se um dispositivo corporativo (laptop, celular) foi comprometido, desconecte-o da rede da empresa (Wi-Fi, VPN) para evitar a propagação da ameaça.</p>
                         </div>
                     </div>
@@ -452,7 +443,7 @@
 
     <footer class="bg-gray-800 text-white mt-20 py-10">
         <div class="container mx-auto px-8 text-center">
-            <p class="text-lg">&copy; 2025 Norma IT. Mantenha-se informado, mantenha-se seguro.</p>
+            <p class="text-lg">&copy; 2025 NORMA Group IT&BPM. Mantenha-se informado, mantenha-se seguro.</p>
         </div>
     </footer>
 
@@ -503,6 +494,10 @@
                 'malware': {
                     title: 'Malware (Vírus, Cavalos de Troia)',
                     text: 'Termo genérico para software malicioso projetado para danificar, desabilitar, roubar dados ou obter acesso não autorizado a sistemas de computador. Inclui vírus (que se replicam), cavalos de Troia (disfarçados de software legítimo) e spyware (que monitora atividades).'
+                },
+                'ia-responsavel': {
+                    title: 'Uso Responsável de IA',
+                    text: 'A utilização de ferramentas de Inteligência Artificial de forma segura, ética e que preserve a privacidade dos dados. Na Norma Group, recomendamos o uso do Microsoft Copilot para funções específicas, pois as informações inseridas não são gravadas nem enviadas para terceiros, garantindo a confidencialidade e segurança das informações corporativas. Copilot é a ferramenta indicada pela Norma Group.'
                 }
             };
 
